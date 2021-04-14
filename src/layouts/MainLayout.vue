@@ -7,7 +7,7 @@
 
         <q-toolbar-title class="text-weight-bold">
 
-         <span class="gt-sm">QTwitter</span>
+         <span class="gt-sm">{{ $route.name }}</span>
           <q-icon
             class="header-icon q-pa-md lt-md"
             name="fas fa-dove"
@@ -35,6 +35,7 @@
           to="/"
           clickable
           v-ripple
+          exact
         >
           <q-item-section avatar>
             <q-icon name="home" size="md"/>
@@ -47,6 +48,7 @@
           to="/about"
           clickable
           v-ripple
+          exact
         >
           <q-item-section avatar>
             <q-icon name="help" size="md"/>
