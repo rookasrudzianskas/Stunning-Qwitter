@@ -1,6 +1,7 @@
 # Qwitter (qwitter)
 
-A quasar app
+<img width="1509" alt="Screen Shot 2021-04-14 at 3 24 56 PM" src="https://user-images.githubusercontent.com/38469892/114709703-985d2200-9d35-11eb-850f-ae90dac876f7.png">
+
 
 ## Install the dependencies
 ```bash
@@ -13,10 +14,3 @@ quasar dev
 ```
 
 
-### Build the app for production
-```bash
-quasar build
-```
-
-### Customize the configuration
-See [Configuring quasar.conf.js](https://v1.quasar.dev/quasar-cli/quasar-conf-js).
