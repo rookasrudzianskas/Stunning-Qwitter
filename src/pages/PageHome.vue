@@ -37,29 +37,56 @@
       class="divider"
     />
 
-    <q-list>
-      <q-item clickable v-ripple>
-        <q-item-section avatar>
+    <q-list separator>
+      <q-item
+        v-for="qweet in qweets"
+        :key="qweet.date"
+        class="q-py-md">
+        <q-item-section avatar top>
           <q-avatar>
-            <img src="https://twitter.com/byrookas/photo">
+            <img src="../assets/RS1Aa0iK_400x400.jpeg">
           </q-avatar>
         </q-item-section>
 
         <q-item-section>
-          <q-item-label ><strong>Rookas Rudzianskas</strong>
+          <q-item-label class="text-subtitle1">
+            <strong>Rookas Rudzianskas</strong>
           <span class="text-grey-7">
             @rookasrudzianskas
           </span>
           </q-item-label>
-          <q-item-label>
-            <span class="text-weight-bold">Janet</span>
-            -- I'll be in your neighborhood doing errands this
-            weekend. Do you want to grab brunch?
-          </q-item-label>
+          <q-item-label class="qweet-content text-body1">{{qweet.content}}</q-item-label>
+
+          <div class="qweet-icons row justify-between q-mt-sm">
+            <q-btn
+              flat
+              round color="grey"
+              icon="far fa-comment"
+              size="sm"
+            />
+            <q-btn
+              flat
+              round color="grey"
+              icon="fas fa-retweet"
+              size="sm"
+            />
+            <q-btn
+              flat
+              round color="grey"
+              icon="far fa-heart"
+              size="sm"
+            />
+            <q-btn
+              flat
+              round color="grey"
+              icon="fas fa-trash"
+              size="sm"
+            />
+          </div>
         </q-item-section>
 
         <q-item-section side top>
-          1 min ago
+          {{qweet.date | relativeDate}}
         </q-item-section>
       </q-item>
     </q-list>
@@ -67,14 +94,29 @@
 </template>
 
 <script>
+import { formatDistance } from 'date-fns'
 export default {
   name: 'PageHome',
   data() {
     return {
-      newQweetContent: ''
+      newQweetContent: '',
+      qweets: [
+        {
+          content: 'content:Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas hendrerit nibh ut hendrerit laoreet. Donec vestibulum erat sed faucibus tristique',
+          date: 1611653238221,
+        },
+        {
+          content: 'content:Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas hendrerit nibh ut hendrerit laoreet. Donec vestibulum erat sed faucibus tristique',
+          date: 1611653238444,
+        }
+      ]
+    }
+  },
+  filters: {
+    relativeDate(value) {
+      formatDistance(value, new Date())
     }
   }
-
 }
 </script>
 
@@ -88,4 +130,10 @@ export default {
   border-top: 1px solid
   border-bottom: 1px solid
   border-color: $grey-4
+
+.qweet-content
+  white-space: pre-line
+
+.qweet-icons
+  margin-left: -5px
 </style>
