@@ -21,6 +21,7 @@
       </div>
       <div class="col col-shrink">
         <q-btn
+          @click="addNewQweet"
           class="q-mb-lg"
           :disable="!newQweetContent"
           unelevated
@@ -77,6 +78,7 @@
               size="sm"
             />
             <q-btn
+              @click="deleteQweet(qweet)"
               flat
               round color="grey"
               icon="fas fa-trash"
@@ -110,6 +112,20 @@ export default {
           date: 1618424677545,
         }
       ]
+    }
+  },
+  methods: {
+    addNewQweet() {
+      let newQweet = {
+        content: this.newQweetContent,
+        date: Date.now()
+      }
+      this.qweets.unshift(newQweet)
+    },
+    deleteQweet(qweet) {
+      let dateToDelete = qweet.date
+      let index = this.qweets.findIndex(qweet => qweet.date === dateToDelete)
+      this.qweets.splice(index, 1)
     }
   },
   filters: {
