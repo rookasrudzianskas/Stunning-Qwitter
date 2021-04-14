@@ -86,7 +86,7 @@
         </q-item-section>
 
         <q-item-section side top>
-          {{qweet.date | relativeDate}}
+          {{qweet.date  | relativeDate}}
         </q-item-section>
       </q-item>
     </q-list>
@@ -103,18 +103,18 @@ export default {
       qweets: [
         {
           content: 'content:Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas hendrerit nibh ut hendrerit laoreet. Donec vestibulum erat sed faucibus tristique',
-          date: 1618387146771,
+          date: 1618424659701,
         },
         {
           content: 'content:Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas hendrerit nibh ut hendrerit laoreet. Donec vestibulum erat sed faucibus tristique',
-          date: 1618387146771,
+          date: 1618424677545,
         }
       ]
     }
   },
   filters: {
     relativeDate(value) {
-      formatDistance(value, new Date())
+      return formatDistance(value, new Date())
     }
   }
 }
