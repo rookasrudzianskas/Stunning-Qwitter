@@ -128,7 +128,12 @@ export default {
         content: this.newQweetContent,
         date: Date.now()
       }
-      this.qweets.unshift(newQweet)
+      // this.qweets.unshift(newQweet)
+      db.collection('qweets').add(newQweet).then((docRef) => {
+          console.log('Document written with ID: ', docRef.id)
+        }).catch((error) => {
+          console.error('Error adding document: ', error)
+        })
       this.newQweetContent = ''
     },
     deleteQweet(qweet) {
@@ -143,16 +148,18 @@ export default {
     }
   },
   mounted() {
-    db.collection('qweets').onSnapshot((snapshot) => {
+    db.collection('qweets').orderBy('date').onSnapshot((snapshot) => {
         snapshot.docChanges().forEach((change) => {
+          let qweetChange = change.doc.data()
           if (change.type === 'added') {
-            console.log('New qweet: ', change.doc.data())
+            console.log('New qweet: ', qweetChange)
+            this.qweets.unshift(qweetChange)
           }
           if (change.type === 'modified') {
-            console.log('Modified qweet: ', change.doc.data())
+            console.log('Modified qweet: ', qweetChange)
           }
           if (change.type === 'removed') {
-            console.log('Removed qweet: ', change.doc.data())
+            console.log('Removed qweet: ', qweetChange)
           }
         });
       });
