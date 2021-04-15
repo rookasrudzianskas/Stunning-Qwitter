@@ -1,5 +1,6 @@
 <template>
-  <q-page>
+  <q-page class="relative-position">
+    <q-scroll-area class="absolute fullscreen">
     <div class="q-py-lg q-px-md row items-end q-col-gutter-md">
       <div class="col">
         <q-input
@@ -39,63 +40,70 @@
     />
 
     <q-list separator>
-      <q-item
-        v-for="qweet in qweets"
-        :key="qweet.date"
-        class="q-py-md">
-        <q-item-section avatar top>
-          <q-avatar>
-            <img src="../assets/RS1Aa0iK_400x400.jpeg">
-          </q-avatar>
-        </q-item-section>
+        <transition-group
+          appear
+          enter-active-class="animated fadeIn slow"
+          leave-active-class="animated fadeOut slow"
+         >
+           <q-item
+          v-for="qweet in qweets"
+          :key="qweet.date"
+          class="qweet q-py-md">
+          <q-item-section avatar top>
+            <q-avatar>
+              <img src="../assets/RS1Aa0iK_400x400.jpeg">
+            </q-avatar>
+          </q-item-section>
 
-        <q-item-section>
-          <q-item-label class="text-subtitle1">
-            <strong>Rookas Rudzianskas</strong>
-          <span class="text-grey-7">
-            @rookasrudzianskas
-          </span>
-          </q-item-label>
-          <q-item-label class="qweet-content text-body1">{{qweet.content}}</q-item-label>
+          <q-item-section>
+            <q-item-label class="text-subtitle1">
+              <strong>Rookas Rudzianskas</strong>
+            <span class="text-grey-7">
+              @rookasrudzianskas
+              <br class="lt-md">&bull; {{qweet.date  | relativeDate}}
+            </span>
+            </q-item-label>
+            <q-item-label class="qweet-content text-body1">{{qweet.content}}</q-item-label>
 
-          <div class="qweet-icons row justify-between q-mt-sm">
-            <q-btn
-              flat
-              round color="grey"
-              icon="far fa-comment"
-              size="sm"
-            />
-            <q-btn
-              flat
-              round color="grey"
-              icon="fas fa-retweet"
-              size="sm"
-            />
-            <q-btn
-              flat
-              round color="grey"
-              icon="far fa-heart"
-              size="sm"
-            />
-            <q-btn
-              @click="deleteQweet(qweet)"
-              flat
-              round color="grey"
-              icon="fas fa-trash"
-              size="sm"
-            />
-          </div>
-        </q-item-section>
-
-        <q-item-section side top>
-          {{qweet.date  | relativeDate}}
-        </q-item-section>
-      </q-item>
+            <div class="qweet-icons row justify-between q-mt-sm">
+              <q-btn
+                flat
+                round color="grey"
+                icon="far fa-comment"
+                size="sm"
+              />
+              <q-btn
+                flat
+                round color="grey"
+                icon="fas fa-retweet"
+                size="sm"
+              />
+              <q-btn
+                flat
+                round color="grey"
+                icon="far fa-heart"
+                size="sm"
+              />
+              <q-btn
+                @click="deleteQweet(qweet)"
+                flat
+                round color="grey"
+                icon="fas fa-trash"
+                size="sm"
+              />
+            </div>
+          </q-item-section>
+        </q-item>
+        </transition-group>
     </q-list>
+
+    </q-scroll-area>
   </q-page>
+
 </template>
 
 <script>
+import db from 'src/boot/firebase'
 import { formatDistance } from 'date-fns'
 export default {
   name: 'PageHome',
@@ -103,14 +111,14 @@ export default {
     return {
       newQweetContent: '',
       qweets: [
-        {
-          content: 'content:Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas hendrerit nibh ut hendrerit laoreet. Donec vestibulum erat sed faucibus tristique',
-          date: 1618424659701,
-        },
-        {
-          content: 'content:Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas hendrerit nibh ut hendrerit laoreet. Donec vestibulum erat sed faucibus tristique',
-          date: 1618424677545,
-        }
+        // {
+        //   content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas hendrerit nibh ut hendrerit laoreet. Donec vestibulum erat sed faucibus tristique',
+        //   date: 1618424659701,
+        // },
+        // {
+        //   content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas hendrerit nibh ut hendrerit laoreet. Donec vestibulum erat sed faucibus tristique',
+        //   date: 1618424677545,
+        // },
       ]
     }
   },
@@ -121,6 +129,7 @@ export default {
         date: Date.now()
       }
       this.qweets.unshift(newQweet)
+      this.newQweetContent = ''
     },
     deleteQweet(qweet) {
       let dateToDelete = qweet.date
@@ -132,7 +141,22 @@ export default {
     relativeDate(value) {
       return formatDistance(value, new Date())
     }
-  }
+  },
+  mounted() {
+    db.collection('qweets').onSnapshot((snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          if (change.type === 'added') {
+            console.log('New qweet: ', change.doc.data())
+          }
+          if (change.type === 'modified') {
+            console.log('Modified qweet: ', change.doc.data())
+          }
+          if (change.type === 'removed') {
+            console.log('Removed qweet: ', change.doc.data())
+          }
+        });
+      });
+  },
 }
 </script>
 
@@ -152,4 +176,7 @@ export default {
 
 .qweet-icons
   margin-left: -5px
+
+.qweet:not(:first-child)
+  border-top: 1px solid rgba(0, 0, 0, 0.12)
 </style>
