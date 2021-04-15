@@ -13,4 +13,8 @@ npm install
 quasar dev
 ```
 
+Screenshots ->
 
+<img width="1442" alt="Screen Shot 2021-04-15 at 2 09 01 PM" src="https://user-images.githubusercontent.com/38469892/114862210-ed14a180-9df6-11eb-9779-729c79d9d326.png">
+
+<img width="455" alt="Screen Shot 2021-04-15 at 2 27 19 PM" src="https://user-images.githubusercontent.com/38469892/114862236-f1d95580-9df6-11eb-9e77-e633ad222475.png">
