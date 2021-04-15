@@ -47,7 +47,7 @@
          >
            <q-item
           v-for="qweet in qweets"
-          :key="qweet.date"
+          :key="qweet.id"
           class="qweet q-py-md">
           <q-item-section avatar top>
             <q-avatar>
@@ -137,9 +137,11 @@ export default {
       this.newQweetContent = ''
     },
     deleteQweet(qweet) {
-      let dateToDelete = qweet.date
-      let index = this.qweets.findIndex(qweet => qweet.date === dateToDelete)
-      this.qweets.splice(index, 1)
+      db.collection('qweets').doc(qweet.id).delete().then(() => {
+        console.log('Document successfully deleted!');
+      }).catch((error) => {
+        console.error('Error removing document: ', error);
+      });
     }
   },
   filters: {
@@ -151,6 +153,7 @@ export default {
     db.collection('qweets').orderBy('date').onSnapshot((snapshot) => {
         snapshot.docChanges().forEach((change) => {
           let qweetChange = change.doc.data()
+          qweetChange.id = change.doc.id
           if (change.type === 'added') {
             console.log('New qweet: ', qweetChange)
             this.qweets.unshift(qweetChange)
@@ -160,10 +163,12 @@ export default {
           }
           if (change.type === 'removed') {
             console.log('Removed qweet: ', qweetChange)
+            let index = this.qweets.findIndex(qweet => qweet.id === qweetChange.id)
+            this.qweets.splice(index, 1)
           }
-        });
-      });
-  },
+        })
+      })
+  }
 }
 </script>
 
